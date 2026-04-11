@@ -1,5 +1,5 @@
 from gpiozero import LED,Button
-from time import sleep
+from time import sleep,time
 from random import uniform
 
 led=LED(4)
@@ -15,16 +15,24 @@ round_num=1
 
 round_active=True
 
+round_start_time=0
+
 def pressed(button):
-    global round_active,left_score,right_score
+    global round_active,left_score,right_score,round_start_time
     if round_active:
        round_active=False
+
+       reaction_time=time()-round_start_time
+
        if button.pin.number==14:
           print(left_name+'won the game')
           left_score+=1
+          print(f"Reaction time:{reaction_time:.3f}seconds")
        else:
           print(right_name+'won the game')
           right_score+=1
+          print(f"Reaction time:{reaction_time:.3f}seconds")
+
        print(f"Score-{left_name}:{left_score},{right_name}:{right_score}")
 
 try:
@@ -35,8 +43,11 @@ try:
        sleep(1)
 
        led.on()
-       sleep(uniform(5,10))
+       wait_time=uniform(5,10)
+       sleep(wait_time)
+
        led.off()
+       round_start_time=time()
 
        right_button.when_pressed=pressed
        left_button.when_pressed=pressed
