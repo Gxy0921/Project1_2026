@@ -9,18 +9,23 @@ left_button=Button(14,bounce_time=0.1)
 left_name=input("Left plater name is:")
 right_name=input("Right plater name is:")
 
+left_score=0
+right_score=0
 round_num=1
 
 round_active=True
 
 def pressed(button):
-    global round_active
+    global round_active,left_score,right_score
     if round_active:
        round_active=False
        if button.pin.number==14:
           print(left_name+'won the game')
+          left_score+=1
        else:
           print(right_name+'won the game')
+          right_score+=1
+       print(f"Score-{left_name}:{left_score},{right_name}:{right_score}")
 
 try:
     while True:
@@ -44,4 +49,5 @@ try:
 
 except KeyboardInterrupt:
     print('Game over')
+    print(f"Final Score-{left_name}:{left_score},{right_name}:{right_score}")
     led.close()
